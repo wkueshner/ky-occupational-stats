@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1538518227609.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "F53F80DC",
+    "lastKnownWriteTime" : 1538520075,
+    "last_content_update" : 1538530783977,
+    "path" : "C:/Users/bkues_000/projects/clb-kentucky/edu_analysis.r",
+    "project_path" : "edu_analysis.r",
+    "properties" : {
+        "cursorPosition" : "9,0",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

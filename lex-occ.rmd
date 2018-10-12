@@ -1,0 +1,90 @@
+---
+title: "Lexington Occupational Statistics: Preliminary Findings"
+author: "Clearbrook Associates"
+date: "October 11, 2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## First: What's a Location Quotient (LQ)?
+The location quotient for occupations are calculated by dividing the regional concentration
+of a particular occupation by the national average concentration of that occupation. Thus,
+an occupation with an LQ of less than one for a given metropolitan region is less concentrated than the national average, and an occupation withan LQ of greater than one is more concentrated than the national average.
+
+```{r packages, echo=FALSE, message=FALSE}
+library(tidyverse)
+library(png)
+library(ggthemes)
+library(ggrepel)
+library()
+
+load(file = "rdas/bls.rda")
+
+blslex_farm <- bls %>% filter(PRIM_STATE == "KY", AREA_NAME == "Lexington-Fayette, KY", 
+                        OCC_GROUP == "major",
+                        lq <= mean(lq, na.rm = TRUE) + 4*sd(lq, na.rm = TRUE),
+                        lq >= mean(lq, na.rm = TRUE) - 4*sd(lq, na.rm = TRUE)) %>% #note this
+  arrange(desc(lq))
+
+blslex_farm$OCC_TITLE <- (gsub('.{12}$', '', blslex_farm$OCC_TITLE))
+
+```
+
+## Comparing LQs and Salaries Across Lexington-Fayette Occupation Groups
+
+```{r general lq v salary, echo=FALSE}
+fit <- lm(blslex_farm$lq~blslex_farm$A_MEAN)
+
+blslex_farm %>% ggplot(aes(A_MEAN, lq)) +
+  geom_point() +
+  geom_abline(intercept = fit$coefficients[1], slope = fit$coefficients[2]) +
+  theme_economist() +
+  labs(x= "Annual Salary", y = "Location Quotient", 
+       title = "Location quotient vs. Annual Salary in
+       Lexington-Fayette (All Occupations)") +
+  geom_vline(xintercept = 44564) +
+  geom_text_repel(aes(label = OCC_TITLE), size = 2) 
+```
+
+This first scatterplot depicts the relationship between the location quotients and annual salaries across all major occupation groups in Lexington-Fayette metropolitan area. The vertical line represents the median annual salary in the U.S., and the diagonal line represents the linear model fitting this data. Farming, Forestry, and Fishing occupations have been removed from the visualization (LQ = 1.94). 
+
+As you can see, there appears to be a negative trend between LQs and annual salaries in Lexington-Fayette, with Healthcare occupations being a notable exception (LQ = 1.20).
+
+## Comparing LQs and salaries Across Lexington-Fayette Math & Computer Occupations
+
+```{r math-science lq v salary, echo = FALSE}
+blstech <- bls %>% 
+  filter(bls$OCC_CODE > 150000, bls$OCC_CODE < 160000,
+         PRIM_STATE == "KY", AREA_NAME == "Lexington-Fayette, KY",
+         OCC_TITLE != "Operations Research Analysts") 
+
+#note that geom_text_repel from ggrepel package does the work of fitting text on the plot panel
+blstech %>%
+  ggplot(aes(A_MEAN, lq)) +
+  geom_point() +
+  geom_text_repel(aes(label = OCC_TITLE), vjust = -1, size = 3) +
+  theme_economist()  + 
+  labs(x= "annual salary", y = "location quotient", 
+       title = "Location quotient vs. Annual Salary for
+       Math & Computer Occupations in Lexington-Fayette") +
+  xlim(40000, 90000) + ylim(.2, 1.05)
+```
+
+We see location quotients of almost exclusively less than one for math and computer occupations. Also, as in the first scatterplot, we again observe a slightly negative trend between LQs and salaries. Operations Research Analysts, not depicted above, are a significant upper outlier with a LQ indicating an occupational concentration of nearly two times the national average (LQ = 1.91).
+
+## Annualized Job Growth Estimates by Occupation Group
+
+```{r annualized job growth, echo = FALSE, message = FALSE}
+im <- readPNG("plots/annualized_job_growth_estimates.png")
+grid::grid.raster(im)
+```
+
+Interestingly, we see here that Math & Computer Occupations are projected to outpace average job growth in other Kentucky occupations by 243% (1.531/0.630 * 100) year-over-year. So although Math and Computer Occupations are currently underconcentrated in Lexington-Fayette, they are expected to experience much faster than average growth.
+
+# Sources
+
+The data visualized in the first two scatterplots this document are as retrieved from the U.S. Bureau of Labor Statistics Occupation Employment Statistics dataset (May 2017). The third visualization was extracted from the Kentucky Center for Statistics "2016-2026 Occupational Outlook" report (September 2018).

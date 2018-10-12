@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1538161242121.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "153B10D5",
+    "lastKnownWriteTime" : 1538519143,
+    "last_content_update" : 1538519143256,
+    "path" : "C:/Users/bkues_000/projects/clb-kentucky/wrangle-bls.r",
+    "project_path" : "wrangle-bls.r",
+    "properties" : {
+        "cursorPosition" : "30,0",
+        "scrollLine" : "9",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

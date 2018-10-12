@@ -1,0 +1,24 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1538165999822.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "CA33B058",
+    "lastKnownWriteTime" : 1539302992,
+    "last_content_update" : 1539302992316,
+    "path" : "C:/Users/bkues_000/projects/clb-kentucky/occ_analysis.r",
+    "project_path" : "occ_analysis.r",
+    "properties" : {
+        "cursorPosition" : "83,0",
+        "notebook_format" : "html_document",
+        "scrollLine" : "69",
+        "tempName" : "Untitled2"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

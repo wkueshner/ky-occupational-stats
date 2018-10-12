@@ -1,0 +1,61 @@
+---
+title: 'Lexington Economics: Preliminary Occupational Data Exploration'
+author: "William Kueshner"
+date: "September 30, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+```{r packages, message = FALSE, warning= FALSE}
+library(rio)
+library(tidyverse)
+library(ggthemes)
+library(ggrepel)
+```
+
+```{r wrangling, message = FALSE}
+
+
+filename <- "us-bls-labor-statistics.csv"
+bls <- import(filename)
+
+#using basic regex to convert numeric data to numeric fields
+bls$OCC_CODE <- as.numeric(gsub("-", "", bls$OCC_CODE))
+bls$A_MEAN <- as.numeric(gsub(",", "", bls$A_MEAN))
+bls$TOT_EMP <- as.numeric(gsub(",", "", bls$TOT_EMP))
+bls$location_quotient <- as.numeric(bls$location_quotient)
+
+#saving data frame as an R data file
+save(bls, file = "rdas/bls.rda")
+
+```
+```{r filtering}
+
+blstech <- bls %>% 
+  filter(bls$OCC_CODE > 150000, bls$OCC_CODE < 160000,
+         PRIM_STATE == "KY", AREA_NAME == "Lexington-Fayette, KY", 
+         OCC_TITLE != "Operations Research Analysts") 
+```
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r plotting}
+blstech %>%
+  ggplot(aes(A_MEAN, location_quotient)) +
+  geom_point() +
+  geom_text(aes(label = OCC_TITLE), vjust = -1, hjust = .3, size = 3) +
+  scale_y_continuous(breaks = c(.2, .4, .6, .8, 1.0)) +
+  theme_economist()
+```
+
+
+
